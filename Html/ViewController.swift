@@ -56,6 +56,17 @@ class ViewController: UIViewController {
         }
     }
     
+    @IBAction func clearButtonAction(sender: AnyObject) {
+        dataManager.applyFilter("") { () -> () in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.filterTextField.text = ""
+                self.tableView.reloadData()
+            })
+        }
+    }
+
+    
+    
 }
 
 extension ViewController: UITableViewDataSource, UITableViewDelegate {

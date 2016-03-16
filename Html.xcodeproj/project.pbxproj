@@ -38,7 +38,7 @@
 
 /* Begin PBXFileReference section */
 		6F684513F8259BA917B3159E /* Pods-Html.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Html.release.xcconfig"; path = "Pods/Target Support Files/Pods-Html/Pods-Html.release.xcconfig"; sourceTree = "<group>"; };
-		7F137F251C8CEDAC00C13E5D /* Html.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Html.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F137F251C8CEDAC00C13E5D /* WWDC Videos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WWDC Videos.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F137F281C8CEDAC00C13E5D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7F137F2A1C8CEDAC00C13E5D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		7F137F2D1C8CEDAD00C13E5D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -107,7 +107,7 @@
 		7F137F261C8CEDAC00C13E5D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7F137F251C8CEDAC00C13E5D /* Html.app */,
+				7F137F251C8CEDAC00C13E5D /* WWDC Videos.app */,
 				7F137F391C8CEDAD00C13E5D /* HtmlTests.xctest */,
 				7F137F441C8CEDAD00C13E5D /* HtmlUITests.xctest */,
 			);
@@ -175,7 +175,7 @@
 			);
 			name = Html;
 			productName = Html;
-			productReference = 7F137F251C8CEDAC00C13E5D /* Html.app */;
+			productReference = 7F137F251C8CEDAC00C13E5D /* WWDC Videos.app */;
 			productType = "com.apple.product-type.application";
 		};
 		7F137F381C8CEDAD00C13E5D /* HtmlTests */ = {
@@ -226,6 +226,7 @@
 				TargetAttributes = {
 					7F137F241C8CEDAC00C13E5D = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = C6UURRL96Y;
 					};
 					7F137F381C8CEDAD00C13E5D = {
 						CreatedOnToolsVersion = 7.2.1;
@@ -481,10 +482,11 @@
 			baseConfigurationReference = C144A40F28A0111990CD87D7 /* Pods-Html.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = Html/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.furiousmidgetgiraffe.Html;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "WWDC Videos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -495,10 +497,11 @@
 			baseConfigurationReference = 6F684513F8259BA917B3159E /* Pods-Html.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = Html/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.furiousmidgetgiraffe.Html;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "WWDC Videos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
