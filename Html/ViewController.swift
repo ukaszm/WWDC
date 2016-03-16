@@ -14,6 +14,7 @@ import Kanna
 class ViewController: UIViewController {
     var player: AVPlayer!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var filterTextField: UITextField!
     
     let dataManager = DataManager.sharedInstance
     
@@ -44,6 +45,17 @@ class ViewController: UIViewController {
             self.player.play()
         }
     }
+    
+    //MARK: Actions
+    @IBAction func filterTextFieldEditingChangedAction(sender: UITextField) {
+        guard let filterText = sender.text else { return }
+        dataManager.applyFilter(filterText) { () -> () in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.tableView.reloadData()
+            })
+        }
+    }
+    
 }
 
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
@@ -58,15 +70,35 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("VideoCell", forIndexPath: indexPath)
-        cell.textLabel?.text = dataManager.itemAtIndexPath(indexPath).title
+        let item = dataManager.itemAtIndexPath(indexPath)
+        cell.textLabel?.attributedText = nil
+        cell.textLabel?.text = item.title
+        if let range = item.selectedRange {
+            let attText = NSMutableAttributedString(string: item.title)
+            attText.addAttribute(NSBackgroundColorAttributeName, value: UIColor.yellowColor(), range: range)
+            cell.textLabel?.attributedText = attText
+        }
         return cell
     }
     
-    //UITableViewDelegate
+    //MARK: UITableViewDelegate
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
 
         guard let videoUrlString = dataManager.videoUrlForItemAtIndexPath(indexPath) else { return }
         playVideoAVPlayerViewController(videoUrlString)
     }
+    
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        filterTextField.resignFirstResponder()
+    }
+}
+
+extension ViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
 }
 

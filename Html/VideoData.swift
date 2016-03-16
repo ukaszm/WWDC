@@ -12,4 +12,5 @@ struct VideoData {
     let title: String
     let path: String
     let img: String?
+    var selectedRange: NSRange?
 }

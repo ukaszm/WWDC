@@ -21,7 +21,8 @@ final class DataManager {
                       "https://developer.apple.com/videos/wwdc2013/"]
     
     //MARK: properties
-    var dataSource = [VideoData]()
+    private var dataSource = [VideoData]()
+    private var outputData = [VideoData]()
     
     //MARK: fetching data
     func fetchData() {
@@ -30,6 +31,7 @@ final class DataManager {
         }
     }
     
+    //consider making it async (handle thread safe read/write dataSource and outputData arrays)
     private func fetchDataFromURL(urlString: String) {
         guard let url  = NSURL(string: urlString) else { return }
         guard let data = NSData(contentsOfURL: url) else { return }
@@ -41,8 +43,10 @@ final class DataManager {
             //let image = node.css("img").first?["src"]
             let link = serverPath + (node.css("a").first?["href"] ?? "")
             
-            dataSource.append(VideoData(title: title, path: link, img: nil))
+            dataSource.append(VideoData(title: title, path: link, img: nil, selectedRange: nil))
+            
         }
+        outputData = dataSource
     }
     
 
@@ -53,11 +57,11 @@ final class DataManager {
     }
     
     func numberOfItems() -> Int{
-        return dataSource.count
+        return outputData.count
     }
     
     func itemAtIndexPath(indexPath: NSIndexPath) -> VideoData {
-        return dataSource[indexPath.row]
+        return outputData[indexPath.row]
     }
     
     func videoUrlForItemAtIndexPath(indexPath: NSIndexPath) -> String? {
@@ -68,5 +72,21 @@ final class DataManager {
         
         guard let videoUrlString = doc.css("li.video").first?.css("a").last?["href"] else { return nil }
         return videoUrlString
+    }
+    
+    //consider making it async
+    func applyFilter(filter: String, completion: (() -> ())?) {
+        if filter.isEmpty {
+            outputData = dataSource
+        }
+        else {
+            outputData = dataSource.filter({$0.title.uppercaseString.containsString(filter.uppercaseString)})
+            
+            for (index,data) in outputData.enumerate() {
+                let title: NSString = data.title.uppercaseString
+                outputData[index].selectedRange = title.rangeOfString(filter.uppercaseString)
+            }
+        }
+        completion?()
     }
 }
