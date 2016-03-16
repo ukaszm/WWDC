@@ -78,6 +78,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             attText.addAttribute(NSBackgroundColorAttributeName, value: UIColor.yellowColor(), range: range)
             cell.textLabel?.attributedText = attText
         }
+        cell.backgroundColor = indexPath.row%2 == 0 ? UIColor(white: 245.0/255.0, alpha: 1.0) : UIColor.whiteColor()
         return cell
     }
     
