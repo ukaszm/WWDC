@@ -11,57 +11,61 @@ import Kanna
 
 
 final class DataManager {
+    typealias SectionData = (title: String, videos: [VideoData])
+    
     static let sharedInstance = DataManager()
     private init() {}
     
-    //MARK: resource paths
-    let serverPath = "https://developer.apple.com"
-    let videoPaths = ["https://developer.apple.com/videos/wwdc2015/",
-                      "https://developer.apple.com/videos/wwdc2014/",
-                      "https://developer.apple.com/videos/wwdc2013/"]
-    
     //MARK: properties
-    private var dataSource = [VideoData]()
-    private var outputData = [VideoData]()
+    private let dataManagerQueue = dispatch_queue_create("dataManagerQueue", DISPATCH_QUEUE_CONCURRENT)
+
+    private var videoDataCollection = [VideoDataColletion]()
+    private var sensitiveVideoData = [SectionData]()
+    private var videoData: [SectionData] {
+        var dataCopy = [SectionData]()
+        dispatch_sync(dataManagerQueue) { [weak self] () -> Void in
+            dataCopy = self?.sensitiveVideoData ?? []
+        }
+        return dataCopy
+    }
     
     //MARK: fetching data
-    func fetchData() {
-        for videoPath in videoPaths {
-            fetchDataFromURL(videoPath)
-        }
-    }
-    
-    //consider making it async (handle thread safe read/write dataSource and outputData arrays)
-    private func fetchDataFromURL(urlString: String) {
-        guard let url  = NSURL(string: urlString) else { return }
-        guard let data = NSData(contentsOfURL: url) else { return }
-        guard let doc  = Kanna.HTML(html: data, encoding: NSUTF8StringEncoding) else { return }
+    func fetchDataWithCompletion(completion: (()->())?) {
         
-        let nodes = doc.css("li.collection-item")
-        for node in nodes {
-            let title = node.css("h5").first?.text ?? ""
-            //let image = node.css("img").first?["src"]
-            let link = serverPath + (node.css("a").first?["href"] ?? "")
-            
-            dataSource.append(VideoData(title: title, path: link, img: nil, selectedRange: nil))
-            
+        for (title,path) in Configuration.videoPaths {
+            let videoCollection = VideoDataColletion(collectionTitle: title, videoCollectionPath: path)
+            videoDataCollection.append(videoCollection)
+            videoCollection.fetchDataWithCompletion({ [weak self] () -> () in
+                self?.applyFilter("", completion: completion)
+            })
         }
-        outputData = dataSource
     }
-    
 
     
     //MARK: dataSource methods
     func numberOfDataSections() -> Int {
-        return 1
+        return videoData.count
     }
     
-    func numberOfItems() -> Int{
-        return outputData.count
+    func numberOfItemsInSection(section: Int) -> Int{
+        return videoData[section].videos.count
     }
     
     func itemAtIndexPath(indexPath: NSIndexPath) -> VideoData {
-        return outputData[indexPath.row]
+        return videoData[indexPath.section].videos[indexPath.row]
+    }
+    
+    func sectionNameAtIndex(index: Int) -> String {
+        return videoData[index].title
+    }
+    
+    func numberOfCellForIndexPath(indexPath: NSIndexPath) -> Int {
+        var number = 0
+        for i in 0..<indexPath.section {
+            let (_, videos) = videoData[i]
+            number += videos.count
+        }
+        return number + indexPath.row
     }
     
     func videoUrlForItemAtIndexPath(indexPath: NSIndexPath) -> String? {
@@ -70,23 +74,26 @@ final class DataManager {
         guard let data = NSData(contentsOfURL: url) else { return nil }
         guard let doc = Kanna.HTML(html: data, encoding: NSUTF8StringEncoding) else { return nil}
         
-        guard let videoUrlString = doc.css("li.video").first?.css("a").last?["href"] else { return nil }
+        guard let videoUrlString = doc.css(Configuration.queryForVideoItemInVideoPage).first?.css(Configuration.queryForVideoLinksInVideoPage).last?[Configuration.queryForVideoUrlInVideoPage] else { return nil }
         return videoUrlString
     }
     
     //consider making it async
     func applyFilter(filter: String, completion: (() -> ())?) {
-        if filter.isEmpty {
-            outputData = dataSource
-        }
-        else {
-            outputData = dataSource.filter({$0.title.uppercaseString.containsString(filter.uppercaseString)})
-            
-            for (index,data) in outputData.enumerate() {
-                let title: NSString = data.title.uppercaseString
-                outputData[index].selectedRange = title.rangeOfString(filter.uppercaseString)
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0)) { [weak self] () -> Void in
+            var tmpVideoData = [SectionData]()
+            guard let videoDataCollection = self?.videoDataCollection else { return }
+            for data in videoDataCollection {
+                data.applyFilterSync(filter)
+                if data.outputData.count == 0 { continue }
+                tmpVideoData.append((data.collectionTitle, data.outputData))
             }
+            guard let queue = self?.dataManagerQueue else { return }
+            dispatch_barrier_async(queue, { [weak self] () -> Void in
+                self?.sensitiveVideoData = tmpVideoData ?? []
+                completion?()
+            })
+           
         }
-        completion?()
     }
 }

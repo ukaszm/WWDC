@@ -17,6 +17,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var filterTextField: UITextField!
     
     let dataManager = DataManager.sharedInstance
+    let cellColors = [UIColor.appGreenColor(), UIColor.appYellowColor(), UIColor.appOrangeColor(), UIColor.appRedColor(), UIColor.appPurpleColor(), UIColor.appBlueColor()]
     
     //MARK: override
     override func viewDidLoad() {
@@ -24,9 +25,14 @@ class ViewController: UIViewController {
         
         let dateStart = NSDate()
         
-        dataManager.fetchData()
+        dataManager.fetchDataWithCompletion { [weak self] () -> () in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self?.tableView.reloadData()
+                print("time: \(NSDate().timeIntervalSince1970 - dateStart.timeIntervalSince1970)")
+            })
+        }
         
-        let interval = NSDate().timeIntervalSince1970 - dateStart.timeIntervalSince1970//dateStart.timeIntervalSinceDate(NSDate())
+        let interval = NSDate().timeIntervalSince1970 - dateStart.timeIntervalSince1970
         print("time: \(interval)")
     }
 
@@ -72,11 +78,11 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
     //MARK: UITableViewDataSource
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        return dataManager.numberOfDataSections()
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataManager.numberOfItems()
+        return dataManager.numberOfItemsInSection(section)
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -89,7 +95,8 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             attText.addAttribute(NSBackgroundColorAttributeName, value: UIColor.yellowColor(), range: range)
             cell.textLabel?.attributedText = attText
         }
-        cell.backgroundColor = indexPath.row%2 == 0 ? UIColor(white: 245.0/255.0, alpha: 1.0) : UIColor.whiteColor()
+//        cell.backgroundColor = indexPath.row%2 == 1 ? UIColor(white: 245.0/255.0, alpha: 1.0) : UIColor.whiteColor()
+        cell.backgroundColor = cellColors[dataManager.numberOfCellForIndexPath(indexPath) % cellColors.count]
         return cell
     }
     
@@ -102,6 +109,10 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
         filterTextField.resignFirstResponder()
+    }
+    
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return dataManager.sectionNameAtIndex(section)
     }
 }
 

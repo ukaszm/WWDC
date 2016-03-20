@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7F137F241C8CEDAC00C13E5D"
-               BuildableName = "Html.app"
+               BuildableName = "WWDC Videos.app"
                BlueprintName = "Html"
                ReferencedContainer = "container:Html.xcodeproj">
             </BuildableReference>
@@ -53,7 +53,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7F137F241C8CEDAC00C13E5D"
-            BuildableName = "Html.app"
+            BuildableName = "WWDC Videos.app"
             BlueprintName = "Html"
             ReferencedContainer = "container:Html.xcodeproj">
          </BuildableReference>
@@ -76,7 +76,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7F137F241C8CEDAC00C13E5D"
-            BuildableName = "Html.app"
+            BuildableName = "WWDC Videos.app"
             BlueprintName = "Html"
             ReferencedContainer = "container:Html.xcodeproj">
          </BuildableReference>
@@ -95,7 +95,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7F137F241C8CEDAC00C13E5D"
-            BuildableName = "Html.app"
+            BuildableName = "WWDC Videos.app"
             BlueprintName = "Html"
             ReferencedContainer = "container:Html.xcodeproj">
          </BuildableReference>
