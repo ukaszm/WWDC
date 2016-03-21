@@ -86,25 +86,42 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("VideoCell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("VideoCell", forIndexPath: indexPath) as! VideoDataTableViewCell
         let item = dataManager.itemAtIndexPath(indexPath)
-        cell.textLabel?.attributedText = nil
-        cell.textLabel?.text = item.title
+        cell.titleLabel?.attributedText = nil
+        cell.titleLabel?.text = item.title
         if let range = item.selectedRange {
             let attText = NSMutableAttributedString(string: item.title)
             attText.addAttribute(NSBackgroundColorAttributeName, value: UIColor.yellowColor(), range: range)
-            cell.textLabel?.attributedText = attText
+            cell.titleLabel?.attributedText = attText
         }
-//        cell.backgroundColor = indexPath.row%2 == 1 ? UIColor(white: 245.0/255.0, alpha: 1.0) : UIColor.whiteColor()
         cell.backgroundColor = cellColors[dataManager.numberOfCellForIndexPath(indexPath) % cellColors.count]
         return cell
     }
     
     //MARK: UITableViewDelegate
+    func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+        if tableView.indexPathForSelectedRow == indexPath {
+            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+            tableView.beginUpdates()
+            tableView.endUpdates()
+            return nil
+        }
+        return indexPath
+    }
+    
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        tableView.beginUpdates()
+        tableView.endUpdates()
 
+        return
         guard let videoUrlString = dataManager.videoUrlForItemAtIndexPath(indexPath) else { return }
         playVideoAVPlayerViewController(videoUrlString)
+    }
+    
+    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+
     }
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
@@ -113,6 +130,10 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return dataManager.sectionNameAtIndex(section)
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return tableView.indexPathForSelectedRow == indexPath ? 200 : 64
     }
 }
 

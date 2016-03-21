@@ -42,22 +42,42 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <inset key="scrollIndicatorInsets" minX="6" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="VideoCell" textLabel="H5O-NT-DOl" style="IBUITableViewCellStyleDefault" id="NF2-RX-sAf">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="VideoCell" id="NF2-RX-sAf" customClass="VideoDataTableViewCell" customModule="WWDC_Videos" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="600" height="64"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NF2-RX-sAf" id="6wn-63-tM9">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="H5O-NT-DOl">
-                                                    <rect key="frame" x="15" y="0.0" width="570" height="64"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RaR-cV-OuP">
+                                                    <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uIF-Ql-nFd">
+                                                            <rect key="frame" x="20" y="0.0" width="560" height="64"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstItem="uIF-Ql-nFd" firstAttribute="leading" secondItem="RaR-cV-OuP" secondAttribute="leading" constant="20" id="82v-Vk-CVE"/>
+                                                        <constraint firstItem="uIF-Ql-nFd" firstAttribute="top" secondItem="RaR-cV-OuP" secondAttribute="top" id="Wv0-WT-Mdw"/>
+                                                        <constraint firstAttribute="height" constant="64" id="X4Z-49-zd7"/>
+                                                        <constraint firstAttribute="trailing" secondItem="uIF-Ql-nFd" secondAttribute="trailing" constant="20" id="igA-ht-pIB"/>
+                                                        <constraint firstAttribute="bottom" secondItem="uIF-Ql-nFd" secondAttribute="bottom" id="v2f-ca-g8k"/>
+                                                    </constraints>
+                                                </view>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="RaR-cV-OuP" secondAttribute="trailing" id="XLy-Jl-sEN"/>
+                                                <constraint firstItem="RaR-cV-OuP" firstAttribute="top" secondItem="6wn-63-tM9" secondAttribute="top" id="v6u-GX-qkz"/>
+                                                <constraint firstItem="RaR-cV-OuP" firstAttribute="leading" secondItem="6wn-63-tM9" secondAttribute="leading" id="vNw-WY-FBk"/>
+                                            </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="titleLabel" destination="uIF-Ql-nFd" id="45W-eb-vMI"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>

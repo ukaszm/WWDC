@@ -18,6 +18,7 @@
 		7F7C01641C9DFC030078BAC8 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7C01631C9DFC030078BAC8 /* UIColorExtension.swift */; };
 		7F7C01661C9E148C0078BAC8 /* VideoDataCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7C01651C9E148C0078BAC8 /* VideoDataCollection.swift */; };
 		7F7C01681C9E163B0078BAC8 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7C01671C9E163B0078BAC8 /* Configuration.swift */; };
+		7F7C016A1C9F7F8B0078BAC8 /* VideoDataTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7C01691C9F7F8B0078BAC8 /* VideoDataTableViewCell.swift */; };
 		7FADA86F1C90F702001562A2 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FADA86E1C90F702001562A2 /* DataManager.swift */; };
 		7FADA8711C90F84C001562A2 /* VideoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FADA8701C90F84C001562A2 /* VideoData.swift */; };
 /* End PBXBuildFile section */
@@ -57,6 +58,7 @@
 		7F7C01631C9DFC030078BAC8 /* UIColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		7F7C01651C9E148C0078BAC8 /* VideoDataCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoDataCollection.swift; sourceTree = "<group>"; };
 		7F7C01671C9E163B0078BAC8 /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
+		7F7C01691C9F7F8B0078BAC8 /* VideoDataTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoDataTableViewCell.swift; sourceTree = "<group>"; };
 		7FADA86E1C90F702001562A2 /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		7FADA8701C90F84C001562A2 /* VideoData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoData.swift; sourceTree = "<group>"; };
 		A442E891D5D533B277C6E185 /* Pods_Html.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Html.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -130,6 +132,7 @@
 				7F137F2A1C8CEDAC00C13E5D /* ViewController.swift */,
 				7FADA8701C90F84C001562A2 /* VideoData.swift */,
 				7F7C01651C9E148C0078BAC8 /* VideoDataCollection.swift */,
+				7F7C01691C9F7F8B0078BAC8 /* VideoDataTableViewCell.swift */,
 				7F137F2C1C8CEDAD00C13E5D /* Main.storyboard */,
 				7F137F2F1C8CEDAD00C13E5D /* Assets.xcassets */,
 				7F137F311C8CEDAD00C13E5D /* LaunchScreen.storyboard */,
@@ -350,6 +353,7 @@
 				7F137F2B1C8CEDAC00C13E5D /* ViewController.swift in Sources */,
 				7F7C01661C9E148C0078BAC8 /* VideoDataCollection.swift in Sources */,
 				7F7C01681C9E163B0078BAC8 /* Configuration.swift in Sources */,
+				7F7C016A1C9F7F8B0078BAC8 /* VideoDataTableViewCell.swift in Sources */,
 				7FADA86F1C90F702001562A2 /* DataManager.swift in Sources */,
 				7F7C01641C9DFC030078BAC8 /* UIColorExtension.swift in Sources */,
 				7F137F291C8CEDAC00C13E5D /* AppDelegate.swift in Sources */,
