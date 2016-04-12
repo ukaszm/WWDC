@@ -115,9 +115,11 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         tableView.beginUpdates()
         tableView.endUpdates()
 
-        //return
-        guard let videoUrlString = dataManager.videoUrlForItemAtIndexPath(indexPath) else { return }
-        playVideoAVPlayerViewController(videoUrlString)
+        guard let videoSiteUrl = NSURL(string: dataManager.itemAtIndexPath(indexPath).path) else { return }
+        UIApplication.sharedApplication().openURL(videoSiteUrl)
+
+        //guard let videoUrlString = dataManager.videoUrlForItemAtIndexPath(indexPath) else { return }
+        //playVideoAVPlayerViewController(videoUrlString)
     }
     
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
