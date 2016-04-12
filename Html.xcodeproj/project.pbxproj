@@ -125,18 +125,8 @@
 		7F137F271C8CEDAC00C13E5D /* Html */ = {
 			isa = PBXGroup;
 			children = (
-				7F137F281C8CEDAC00C13E5D /* AppDelegate.swift */,
-				7F7C01671C9E163B0078BAC8 /* Configuration.swift */,
-				7FADA86E1C90F702001562A2 /* DataManager.swift */,
-				7F7C01631C9DFC030078BAC8 /* UIColorExtension.swift */,
-				7F137F2A1C8CEDAC00C13E5D /* ViewController.swift */,
-				7FADA8701C90F84C001562A2 /* VideoData.swift */,
-				7F7C01651C9E148C0078BAC8 /* VideoDataCollection.swift */,
-				7F7C01691C9F7F8B0078BAC8 /* VideoDataTableViewCell.swift */,
-				7F137F2C1C8CEDAD00C13E5D /* Main.storyboard */,
-				7F137F2F1C8CEDAD00C13E5D /* Assets.xcassets */,
-				7F137F311C8CEDAD00C13E5D /* LaunchScreen.storyboard */,
-				7F137F341C8CEDAD00C13E5D /* Info.plist */,
+				7F92E41A1CBD1ACB0028738B /* Code */,
+				7F92E41B1CBD1B130028738B /* Resources */,
 			);
 			path = Html;
 			sourceTree = "<group>";
@@ -157,6 +147,32 @@
 				7F137F4A1C8CEDAD00C13E5D /* Info.plist */,
 			);
 			path = HtmlUITests;
+			sourceTree = "<group>";
+		};
+		7F92E41A1CBD1ACB0028738B /* Code */ = {
+			isa = PBXGroup;
+			children = (
+				7F137F281C8CEDAC00C13E5D /* AppDelegate.swift */,
+				7F7C01671C9E163B0078BAC8 /* Configuration.swift */,
+				7FADA86E1C90F702001562A2 /* DataManager.swift */,
+				7F7C01631C9DFC030078BAC8 /* UIColorExtension.swift */,
+				7FADA8701C90F84C001562A2 /* VideoData.swift */,
+				7F7C01651C9E148C0078BAC8 /* VideoDataCollection.swift */,
+				7F7C01691C9F7F8B0078BAC8 /* VideoDataTableViewCell.swift */,
+				7F137F2A1C8CEDAC00C13E5D /* ViewController.swift */,
+			);
+			name = Code;
+			sourceTree = "<group>";
+		};
+		7F92E41B1CBD1B130028738B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				7F137F2F1C8CEDAD00C13E5D /* Assets.xcassets */,
+				7F137F341C8CEDAD00C13E5D /* Info.plist */,
+				7F137F311C8CEDAD00C13E5D /* LaunchScreen.storyboard */,
+				7F137F2C1C8CEDAD00C13E5D /* Main.storyboard */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		FEB20F102FD82CB5E310EEA9 /* Frameworks */ = {

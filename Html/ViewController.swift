@@ -17,7 +17,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var filterTextField: UITextField!
     
     let dataManager = DataManager.sharedInstance
-    let cellColors = [UIColor.appGreenColor(), UIColor.appYellowColor(), UIColor.appOrangeColor(), UIColor.appRedColor(), UIColor.appPurpleColor(), UIColor.appBlueColor()]
+    let cellColors = UIColor.appRowsColors()
     
     //MARK: override
     override func viewDidLoad() {
@@ -115,7 +115,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         tableView.beginUpdates()
         tableView.endUpdates()
 
-        return
+        //return
         guard let videoUrlString = dataManager.videoUrlForItemAtIndexPath(indexPath) else { return }
         playVideoAVPlayerViewController(videoUrlString)
     }
@@ -132,9 +132,9 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         return dataManager.sectionNameAtIndex(section)
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return tableView.indexPathForSelectedRow == indexPath ? 200 : 64
-    }
+//    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+//        return tableView.indexPathForSelectedRow == indexPath ? 200 : 64
+//    }
 }
 
 extension ViewController: UITextFieldDelegate {
