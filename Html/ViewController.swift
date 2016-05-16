@@ -15,6 +15,7 @@ class ViewController: UIViewController {
     var player: AVPlayer!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var filterTextField: UITextField!
+    @IBOutlet var filterTextFieldToolbar: UIToolbar!
     
     let dataManager = DataManager.sharedInstance
     let cellColors = UIColor.appRowsColors()
@@ -22,6 +23,7 @@ class ViewController: UIViewController {
     //MARK: override
     override func viewDidLoad() {
         super.viewDidLoad()
+        filterTextField.inputAccessoryView = filterTextFieldToolbar
         
         let dateStart = NSDate()
         
@@ -71,6 +73,9 @@ class ViewController: UIViewController {
         }
     }
 
+    @IBAction func filterTextFieldDoneAction(sender: AnyObject) {
+        filterTextField.resignFirstResponder()
+    }
     
     
 }
