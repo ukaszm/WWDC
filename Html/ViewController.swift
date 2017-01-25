@@ -25,16 +25,16 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         filterTextField.inputAccessoryView = filterTextFieldToolbar
         
-        let dateStart = NSDate()
+        let dateStart = Date()
         
         dataManager.fetchDataWithCompletion { [weak self] () -> () in
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                 self?.tableView.reloadData()
-                print("time: \(NSDate().timeIntervalSince1970 - dateStart.timeIntervalSince1970)")
+                print("time: \(Date().timeIntervalSince1970 - dateStart.timeIntervalSince1970)")
             })
         }
         
-        let interval = NSDate().timeIntervalSince1970 - dateStart.timeIntervalSince1970
+        let interval = Date().timeIntervalSince1970 - dateStart.timeIntervalSince1970
         print("time: \(interval)")
     }
 
@@ -44,36 +44,36 @@ class ViewController: UIViewController {
     }
     
     //MARK: private
-    private func playVideoAVPlayerViewController(path: String) {
-        let videoUrl = NSURL(string: path)
-        player = AVPlayer(URL: videoUrl!)
+    fileprivate func playVideoAVPlayerViewController(_ path: String) {
+        let videoUrl = URL(string: path)
+        player = AVPlayer(url: videoUrl!)
         let playerViewController = AVPlayerViewController()
         playerViewController.player = player
-        presentViewController(playerViewController, animated: true) { () -> Void in
+        present(playerViewController, animated: true) { () -> Void in
             self.player.play()
         }
     }
     
     //MARK: Actions
-    @IBAction func filterTextFieldEditingChangedAction(sender: UITextField) {
+    @IBAction func filterTextFieldEditingChangedAction(_ sender: UITextField) {
         guard let filterText = sender.text else { return }
         dataManager.applyFilter(filterText) { () -> () in
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                 self.tableView.reloadData()
             })
         }
     }
     
-    @IBAction func clearButtonAction(sender: AnyObject) {
+    @IBAction func clearButtonAction(_ sender: AnyObject) {
         dataManager.applyFilter("") { () -> () in
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                 self.filterTextField.text = ""
                 self.tableView.reloadData()
             })
         }
     }
 
-    @IBAction func filterTextFieldDoneAction(sender: AnyObject) {
+    @IBAction func filterTextFieldDoneAction(_ sender: AnyObject) {
         filterTextField.resignFirstResponder()
     }
     
@@ -82,22 +82,22 @@ class ViewController: UIViewController {
 
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
     //MARK: UITableViewDataSource
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return dataManager.numberOfDataSections()
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dataManager.numberOfItemsInSection(section)
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("VideoCell", forIndexPath: indexPath) as! VideoDataTableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "VideoCell", for: indexPath) as! VideoDataTableViewCell
         let item = dataManager.itemAtIndexPath(indexPath)
         cell.titleLabel?.attributedText = nil
         cell.titleLabel?.text = item.title
         if let range = item.selectedRange {
             let attText = NSMutableAttributedString(string: item.title)
-            attText.addAttribute(NSBackgroundColorAttributeName, value: UIColor.yellowColor(), range: range)
+            attText.addAttribute(NSBackgroundColorAttributeName, value: UIColor.yellow, range: range)
             cell.titleLabel?.attributedText = attText
         }
         cell.backgroundColor = cellColors[dataManager.numberOfCellForIndexPath(indexPath) % cellColors.count]
@@ -105,9 +105,9 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     //MARK: UITableViewDelegate
-    func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         if tableView.indexPathForSelectedRow == indexPath {
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+            tableView.deselectRow(at: indexPath, animated: true)
             tableView.beginUpdates()
             tableView.endUpdates()
             return nil
@@ -115,27 +115,27 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         return indexPath
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         tableView.beginUpdates()
         tableView.endUpdates()
 
-        guard let videoSiteUrl = NSURL(string: dataManager.itemAtIndexPath(indexPath).path) else { return }
-        UIApplication.sharedApplication().openURL(videoSiteUrl)
+        guard let videoSiteUrl = URL(string: dataManager.itemAtIndexPath(indexPath).path) else { return }
+        UIApplication.shared.openURL(videoSiteUrl)
 
         //guard let videoUrlString = dataManager.videoUrlForItemAtIndexPath(indexPath) else { return }
         //playVideoAVPlayerViewController(videoUrlString)
     }
     
-    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
 
     }
     
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         filterTextField.resignFirstResponder()
     }
     
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return dataManager.sectionNameAtIndex(section)
     }
     
@@ -146,7 +146,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
 
 extension ViewController: UITextFieldDelegate {
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }

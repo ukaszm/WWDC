@@ -10,9 +10,10 @@ import Foundation
 
 struct Configuration {
     static let serverPath = "https://developer.apple.com"
-    static let videoPaths = [("WWDC 2015","https://developer.apple.com/videos/wwdc2015/"),
-        ("WWDC 2014", "https://developer.apple.com/videos/wwdc2014/"),
-        ("WWDC 2013","https://developer.apple.com/videos/wwdc2013/")]
+    static let videoPaths = [("WWDC 2016", "https://developer.apple.com/videos/wwdc2016/"),
+                             ("WWDC 2015","https://developer.apple.com/videos/wwdc2015/"),
+                             ("WWDC 2014", "https://developer.apple.com/videos/wwdc2014/"),
+                             ("WWDC 2013", "https://developer.apple.com/videos/wwdc2013/")]
     
     //todo: get these values from iCloud
     //videos list page

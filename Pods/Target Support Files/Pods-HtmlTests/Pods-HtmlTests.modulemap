@@ -1,0 +1,6 @@
+framework module Pods_HtmlTests {
+  umbrella header "Pods-HtmlTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

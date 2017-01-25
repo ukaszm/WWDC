@@ -14,23 +14,23 @@ final class DataManager {
     typealias SectionData = (title: String, videos: [VideoData])
     
     static let sharedInstance = DataManager()
-    private init() {}
+    fileprivate init() {}
     
     //MARK: properties
-    private let dataManagerQueue = dispatch_queue_create("dataManagerQueue", DISPATCH_QUEUE_CONCURRENT)
+    fileprivate let dataManagerQueue = DispatchQueue(label: "dataManagerQueue", attributes: DispatchQueue.Attributes.concurrent)
 
-    private var videoDataCollection = [VideoDataColletion]()
-    private var sensitiveVideoData = [SectionData]()
-    private var videoData: [SectionData] {
+    fileprivate var videoDataCollection = [VideoDataColletion]()
+    fileprivate var sensitiveVideoData = [SectionData]()
+    fileprivate var videoData: [SectionData] {
         var dataCopy = [SectionData]()
-        dispatch_sync(dataManagerQueue) { [weak self] () -> Void in
+        dataManagerQueue.sync { [weak self] () -> Void in
             dataCopy = self?.sensitiveVideoData ?? []
         }
         return dataCopy
     }
     
     //MARK: fetching data
-    func fetchDataWithCompletion(completion: (()->())?) {
+    func fetchDataWithCompletion(_ completion: (()->())?) {
         
         for (title,path) in Configuration.videoPaths {
             let videoCollection = VideoDataColletion(collectionTitle: title, videoCollectionPath: path)
@@ -47,19 +47,19 @@ final class DataManager {
         return videoData.count
     }
     
-    func numberOfItemsInSection(section: Int) -> Int{
+    func numberOfItemsInSection(_ section: Int) -> Int{
         return videoData[section].videos.count
     }
     
-    func itemAtIndexPath(indexPath: NSIndexPath) -> VideoData {
+    func itemAtIndexPath(_ indexPath: IndexPath) -> VideoData {
         return videoData[indexPath.section].videos[indexPath.row]
     }
     
-    func sectionNameAtIndex(index: Int) -> String {
+    func sectionNameAtIndex(_ index: Int) -> String {
         return videoData[index].title
     }
     
-    func numberOfCellForIndexPath(indexPath: NSIndexPath) -> Int {
+    func numberOfCellForIndexPath(_ indexPath: IndexPath) -> Int {
         var number = 0
         for i in 0..<indexPath.section {
             let (_, videos) = videoData[i]
@@ -68,19 +68,21 @@ final class DataManager {
         return number + indexPath.row
     }
     
-    func videoUrlForItemAtIndexPath(indexPath: NSIndexPath) -> String? {
+    func videoUrlForItemAtIndexPath(_ indexPath: IndexPath) -> String? {
         let videoItem = itemAtIndexPath(indexPath)
-        guard let url = NSURL(string: videoItem.path) else { return nil }
-        guard let data = NSData(contentsOfURL: url) else { return nil }
-        guard let doc = Kanna.HTML(html: data, encoding: NSUTF8StringEncoding) else { return nil}
+        guard let url = URL(string: videoItem.path) else { return nil }
+        guard let data = try? Data(contentsOf: url) else { return nil }
+        guard let doc = Kanna.HTML(html: data, encoding: String.Encoding.utf8) else { return nil}
         
-        guard let videoUrlString = doc.css(Configuration.queryForVideoItemInVideoPage).first?.css(Configuration.queryForVideoLinksInVideoPage).last?[Configuration.queryForVideoUrlInVideoPage] else { return nil }
-        return videoUrlString
+        guard let videoUrlString = doc.css(Configuration.queryForVideoItemInVideoPage).first?.css(Configuration.queryForVideoLinksInVideoPage) else { return nil }
+            
+        guard videoUrlString.count > 0 else { return nil }
+        return videoUrlString[videoUrlString.count-1][Configuration.queryForVideoUrlInVideoPage]
     }
     
     //consider making it async
-    func applyFilter(filter: String, completion: (() -> ())?) {
-        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0)) { [weak self] () -> Void in
+    func applyFilter(_ filter: String, completion: (() -> ())?) {
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.userInteractive).async { [weak self] () -> Void in
             var tmpVideoData = [SectionData]()
             guard let videoDataCollection = self?.videoDataCollection else { return }
             for data in videoDataCollection {
@@ -89,8 +91,8 @@ final class DataManager {
                 tmpVideoData.append((data.collectionTitle, data.outputData))
             }
             guard let queue = self?.dataManagerQueue else { return }
-            dispatch_barrier_async(queue, { [weak self] () -> Void in
-                self?.sensitiveVideoData = tmpVideoData ?? []
+            queue.async(flags: .barrier, execute: { [weak self] () -> Void in
+                self?.sensitiveVideoData = tmpVideoData
                 completion?()
             })
            

@@ -12,15 +12,15 @@ import Kanna
 final class VideoDataColletion {
 
     let collectionTitle: String
-    private let videoCollectionPath: String
-    private var sensitiveVideoData = [VideoData]()
-    private var sensitiveOutputData = [VideoData]()
+    fileprivate let videoCollectionPath: String
+    fileprivate var sensitiveVideoData = [VideoData]()
+    fileprivate var sensitiveOutputData = [VideoData]()
 
-    private let concurentVideoDataQueue = dispatch_queue_create("videoDataQueue", DISPATCH_QUEUE_CONCURRENT)
+    fileprivate let concurentVideoDataQueue = DispatchQueue(label: "videoDataQueue", attributes: DispatchQueue.Attributes.concurrent)
     
-    private var videoData: [VideoData] {
+    fileprivate var videoData: [VideoData] {
         var dataCopy = [VideoData]()
-        dispatch_sync(concurentVideoDataQueue) { [weak self] () -> Void in
+        concurentVideoDataQueue.sync { [weak self] () -> Void in
             dataCopy = self?.sensitiveVideoData ?? []
         }
         return dataCopy
@@ -28,7 +28,7 @@ final class VideoDataColletion {
     
     var outputData: [VideoData] {
         var dataCopy = [VideoData]()
-        dispatch_sync(concurentVideoDataQueue) { [weak self] () -> Void in
+        concurentVideoDataQueue.sync { [weak self] () -> Void in
             dataCopy = self?.sensitiveOutputData ?? []
         }
         return dataCopy
@@ -39,15 +39,15 @@ final class VideoDataColletion {
         self.videoCollectionPath = videoCollectionPath
     }
     
-    func fetchDataWithCompletion(completion: (()->())?) {
-        guard let url  = NSURL(string: videoCollectionPath) else { return }
-        let urlRequest = NSURLRequest(URL: url)
-        let session = NSURLSession.sharedSession()
+    func fetchDataWithCompletion(_ completion: (()->())?) {
+        guard let url  = URL(string: videoCollectionPath) else { return }
+        let urlRequest = URLRequest(url: url)
+        let session = URLSession.shared
         
-        let task = session.dataTaskWithRequest(urlRequest) { [weak self] (nsData, nsUrlResponse, nsError) -> Void in
+        let task = session.dataTask(with: urlRequest, completionHandler: { [weak self] (nsData, nsUrlResponse, nsError) -> Void in
             
             guard let data = nsData else { return }
-            guard let doc  = Kanna.HTML(html: data, encoding: NSUTF8StringEncoding) else { return }
+            guard let doc  = Kanna.HTML(html: data, encoding: String.Encoding.utf8) else { return }
             let serverPath = Configuration.serverPath
             let nodes = doc.css(Configuration.queryForItemInVideoList)
             
@@ -59,30 +59,30 @@ final class VideoDataColletion {
                 dataSource.append(VideoData(title: title, path: link, selectedRange: nil))
             }
             guard let queue = self?.concurentVideoDataQueue else { return }
-            dispatch_barrier_async(queue, { () -> Void in
+            queue.async(flags: .barrier, execute: { () -> Void in
                 self?.sensitiveVideoData = dataSource
                 self?.sensitiveOutputData = dataSource
                 completion?()
             })
-        }
+        }) 
         task.resume()
     }
     
-    func applyFilterSync(filter: String) {
+    func applyFilterSync(_ filter: String) {
         var videoBuff = [VideoData]()
         if filter.isEmpty {
             videoBuff = videoData
         }
         else {
-            videoBuff = videoData.filter({$0.title.uppercaseString.containsString(filter.uppercaseString)})
+            videoBuff = videoData.filter({$0.title.uppercased().contains(filter.uppercased())})
             
-            for (index,data) in videoBuff.enumerate() {
-                let title: NSString = data.title.uppercaseString
-                videoBuff[index].selectedRange = title.rangeOfString(filter.uppercaseString)
+            for (index,data) in videoBuff.enumerated() {
+                let title: NSString = data.title.uppercased() as NSString
+                videoBuff[index].selectedRange = title.range(of: filter.uppercased())
             }
         }
-        dispatch_barrier_sync(concurentVideoDataQueue) { [weak self] () -> Void in
+        concurentVideoDataQueue.sync(flags: .barrier, execute: { [weak self] () -> Void in
             self?.sensitiveOutputData = videoBuff
-        }
+        }) 
     }
 }
