@@ -18,7 +18,7 @@ class ViewController: UIViewController {
     @IBOutlet var filterTextFieldToolbar: UIToolbar!
     
     let dataManager = DataManager.sharedInstance
-    let cellColors = UIColor.appRowsColors()
+    let cellColors = UIColor.appColors()
     
     //MARK: override
     override func viewDidLoad() {
@@ -80,8 +80,8 @@ class ViewController: UIViewController {
     
 }
 
-extension ViewController: UITableViewDataSource, UITableViewDelegate {
-    //MARK: UITableViewDataSource
+//MARK: UITableViewDataSource
+extension ViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return dataManager.numberOfDataSections()
     }
@@ -103,8 +103,11 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         cell.backgroundColor = cellColors[dataManager.numberOfCellForIndexPath(indexPath) % cellColors.count]
         return cell
     }
+}
+
+//MARK: UITableViewDelegate
+extension ViewController: UITableViewDelegate {
     
-    //MARK: UITableViewDelegate
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         if tableView.indexPathForSelectedRow == indexPath {
             tableView.deselectRow(at: indexPath, animated: true)
@@ -127,10 +130,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         //playVideoAVPlayerViewController(videoUrlString)
     }
     
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-
-    }
-    
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         filterTextField.resignFirstResponder()
     }
@@ -144,6 +143,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
 //    }
 }
 
+//MARK: UITextFieldDelegate
 extension ViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
